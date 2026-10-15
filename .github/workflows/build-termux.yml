@@ -14,9 +14,7 @@ jobs:
       - name: Install cargo-ndk tool
         run: cargo install cargo-ndk
 
-      # GitHub Hosted Runners (ubuntu-latest) have the Android NDK pre-installed.
-      # This command points cargo-ndk to the correct NDK path.
-      name: Build Binary with Android NDK Toolchain
+      - name: Build Binary with Android NDK Toolchain
         run: |
           cargo ndk --platform 29 --target aarch64-linux-android build --release
 
@@ -25,4 +23,3 @@ jobs:
         with:
           name: termux-binary
           path: target/aarch64-linux-android/release/
-          
