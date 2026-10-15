@@ -1,14 +1,25 @@
-name: Build for Termux
-on: [workflow_dispatch] # Memungkinkan Anda menjalankan build secara manual
+name: name: Build for Termux
+
+on: [workflow_dispatch]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Install Rust target
         run: rustup target add aarch64-linux-android
-      - name: Build Binary
-        run: cargo build --release --target aarch64-linux-android
+
+      - name: Install cargo-ndk tool
+        run: cargo install cargo-ndk
+
+      # GitHub Hosted Runners (ubuntu-latest) have the Android NDK pre-installed.
+      # This command points cargo-ndk to the correct NDK path.
+      name: Build Binary with Android NDK Toolchain
+        run: |
+          cargo ndk --platform 29 --target aarch64-linux-android build --release
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
