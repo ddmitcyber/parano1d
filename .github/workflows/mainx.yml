@@ -1,28 +1,15 @@
-name: Release2
+name: Build
 
-on:
-  release:
-    types: [created]
+on: [push, pull_request]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-     runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Build Release
+
+      - name: Cross compile
         uses: zijiren233/cargo-cross@v1
         with:
           command: build
-          targets: |
-            armv7-linux-androideabi
-          profile: release
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: binaries-${{ matrix.os }}
-          path: target/*/release/*
+          targets: armv7-linux-androideabi
